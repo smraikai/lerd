@@ -5,7 +5,6 @@
   import { unhealthyWorkers } from '$stores/workerHealth';
   import { status, statusLoaded } from '$stores/status';
   import HeroStatus from './dashboard/HeroStatus.svelte';
-  import OnboardingPanel from './dashboard/OnboardingPanel.svelte';
   import SystemHealthWidget from './dashboard/SystemHealthWidget.svelte';
   import LerdInfoWidget from './dashboard/LerdInfoWidget.svelte';
   import SitesWidget from './dashboard/SitesWidget.svelte';
@@ -33,15 +32,11 @@
 </script>
 
 <div class="flex-1 min-h-0 flex flex-col overflow-y-auto">
-  <div class="shrink-0 flex flex-wrap items-center justify-between gap-y-2 px-3 py-3 border-b border-gray-100 dark:border-lerd-border">
+  <div class="shrink-0 flex flex-wrap items-center justify-between gap-y-2 px-5 py-4 bg-white dark:bg-lerd-card border-b border-gray-200 dark:border-lerd-border">
     <div class="min-w-0">
-      <h1 class="font-semibold text-gray-900 dark:text-white text-xl tracking-tight">{m.dashboard_title()}</h1>
+      <h1 class="font-semibold text-gray-950 dark:text-white text-[17px] tracking-[-0.01em]">{m.dashboard_title()}</h1>
       {#if everythingHealthy}
-        <p class="text-xs text-emerald-700 dark:text-emerald-400 mt-0.5 inline-flex items-center gap-1.5">
-          <span class="relative inline-flex w-1.5 h-1.5">
-            <span class="absolute inline-flex w-full h-full rounded-full bg-emerald-400 opacity-70 animate-ping"></span>
-            <span class="relative inline-flex w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-          </span>
+        <p class="text-xs text-emerald-700 dark:text-emerald-400 mt-0.5">
           {m.dashboard_hero_allGood({ sitesRunning, sitesTotal, servicesActive })}
         </p>
       {:else}
@@ -52,7 +47,7 @@
       type="button"
       onclick={openCommandPalette}
       title={m.dashboard_searchHint()}
-      class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 text-gray-500 dark:text-gray-400 transition-colors"
+      class="hidden sm:inline-flex items-center gap-2 h-8 px-2.5 rounded-[5px] bg-white hover:bg-gray-50 dark:bg-white/[0.04] dark:hover:bg-white/[0.07] border border-gray-200 dark:border-lerd-border text-gray-500 dark:text-gray-400 shadow-xs transition-colors"
     >
       <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -62,12 +57,11 @@
     </button>
   </div>
 
-  <div class="p-3 space-y-3 xl:flex-1 xl:min-h-0 xl:flex xl:flex-col">
-    <OnboardingPanel />
+  <div class="p-4 lg:p-5 space-y-4 max-w-[1180px] w-full mx-auto">
     {#if !everythingHealthy}
       <HeroStatus />
     {/if}
-    <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3 xl:flex-1 xl:min-h-0 xl:auto-rows-fr">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <SitesWidget />
       <ServicesWidget />
       <WorkersWidget />

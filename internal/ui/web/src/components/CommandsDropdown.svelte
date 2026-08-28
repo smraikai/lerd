@@ -1,5 +1,6 @@
 <script lang="ts">
   import { m } from '../paraglide/messages.js';
+  import Icon from './Icon.svelte';
   import { loadCommands, launchCommand, runningName, commandIconPath, type Command } from '$stores/commands';
 
   interface Props {
@@ -154,7 +155,7 @@
             <span class="flex items-center gap-1.5">
               <span class="text-xs font-medium text-gray-900 dark:text-gray-100">{c.label || c.name}</span>
               {#if c.confirm}
-                <span class="shrink-0 w-1.5 h-1.5 rounded-full bg-amber-500" title={m.cmd_asksBeforeRunning()}></span>
+                <span class="shrink-0 text-amber-500" title={m.cmd_asksBeforeRunning()}><Icon name="alert" class="w-3 h-3" /></span>
               {/if}
             </span>
             <span class="block text-[10px] text-gray-500 dark:text-gray-400 font-mono truncate">{c.command}</span>

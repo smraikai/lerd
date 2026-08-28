@@ -36,9 +36,6 @@
     else openServiceInstallModal(name);
   }
 
-  const dot = $derived(
-    !installed ? 'bg-amber-500' : active ? 'bg-emerald-500' : 'bg-gray-400 dark:bg-gray-600'
-  );
   const status = $derived(
     !installed ? m.services_notInstalled() : active ? m.common_running() : m.common_stopped()
   );
@@ -54,10 +51,7 @@
     <ServiceIcon {name} compact />
     <span class="min-w-0 flex-1">
       <span class="block text-xs font-semibold text-gray-800 dark:text-gray-100 truncate">{serviceLabel(name)}</span>
-      <span class="flex items-center gap-1 text-[10px] text-gray-500 dark:text-gray-400">
-        <span class="w-1.5 h-1.5 rounded-full {dot}"></span>
-        {status}
-      </span>
+      <span class="block text-[10px] text-gray-500 dark:text-gray-400">{status}</span>
     </span>
   </button>
   {#if dbAdmin}

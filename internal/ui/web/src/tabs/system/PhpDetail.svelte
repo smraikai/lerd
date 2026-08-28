@@ -12,6 +12,7 @@
   import { xdebugOn, xdebugOff, XDEBUG_MODES, type XdebugMode } from '$stores/xdebug';
   import { openPhpRemoveModal, openPhpRebuildModal } from '$stores/modals';
   import { notifyLocalInfo } from '$lib/notify';
+  import Icon from '$components/Icon.svelte';
   import { m } from '../../paraglide/messages.js';
 
   interface Props {
@@ -261,7 +262,7 @@
           <path class="opacity-90" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
         </svg>
       {:else}
-        <span class="shrink-0 w-2 h-2 rounded-full {xdebugEnabled ? 'bg-emerald-500' : 'border border-gray-300 dark:border-gray-600 bg-transparent'}"></span>
+        <Icon name={xdebugEnabled ? 'check' : 'stop'} class="shrink-0 w-3 h-3 {xdebugEnabled ? 'text-emerald-500' : 'text-gray-400'}" />
       {/if}
       <span>{m.system_php_xdebug()}</span>
     </button>

@@ -45,35 +45,18 @@
     branch: 'text-violet-500 dark:text-violet-400'
   };
 
-  const dotColor: Record<BadgeTone, string> = {
-    running: 'bg-emerald-500',
-    stopped: 'bg-red-500',
-    paused: 'bg-amber-500',
-    framework: 'bg-lerd-red',
-    frankenphp: 'bg-orange-500',
-    'xdebug-on': 'bg-purple-500',
-    'xdebug-off': 'bg-gray-400 dark:bg-gray-600',
-    neutral: 'bg-gray-400',
-    branch: 'bg-violet-500'
-  };
-
   const base = 'inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full transition-colors';
 
   const style = $derived(brandTintStyle(brand));
   const paint = $derived(style ? 'mark-tint' : toneClass[tone]);
-  // On a brand pill the dot is the pill's own colour; there is no fixed class
-  // to reach for, and a tone dot would be the one part left behind.
-  const dotClass = $derived(style ? 'bg-current' : dotColor[tone]);
 </script>
 
 {#if onclick}
   <button {onclick} {title} class="{base} {paint}" {style}>
-    {#if dot}<span class="w-1.5 h-1.5 rounded-full {dotClass}"></span>{/if}
     {@render children()}
   </button>
 {:else}
   <span {title} class="{base} {paint}" {style}>
-    {#if dot}<span class="w-1.5 h-1.5 rounded-full {dotClass}"></span>{/if}
     {@render children()}
   </span>
 {/if}

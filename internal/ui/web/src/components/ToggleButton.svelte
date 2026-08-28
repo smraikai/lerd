@@ -53,18 +53,6 @@
               : 'off'
   );
 
-  const dotClass = $derived(
-    state === 'on'
-      ? 'bg-emerald-500'
-      : state === 'failing'
-        ? 'bg-red-500'
-        : state === 'unreachable'
-          ? 'bg-amber-500 ring-2 ring-amber-500/30'
-          : state === 'loading'
-            ? 'bg-amber-400'
-            : 'border border-gray-300 dark:border-gray-600 bg-transparent'
-  );
-
   const tintClass = $derived(
     state === 'on'
       ? 'bg-emerald-50/60 dark:bg-emerald-900/15 hover:bg-emerald-50 dark:hover:bg-emerald-900/25'
@@ -94,8 +82,6 @@
     <svg class="shrink-0 w-3 h-3 text-sky-500" viewBox="0 0 24 24" fill="currentColor">
       <path d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998z" />
     </svg>
-  {:else}
-    <span class="shrink-0 w-2 h-2 rounded-full {dotClass}"></span>
   {/if}
   <span>{label}</span>
   {#if trailing}{@render trailing()}{/if}

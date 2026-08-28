@@ -27,5 +27,10 @@ window.addEventListener('hashchange', () => {
 
 export function goToTab(t: TabId, rest = '') {
   const h = rest ? `${t}/${rest}` : t;
+  // Update the app immediately instead of waiting for the browser's hashchange
+  // event. This keeps the navigation state and the mounted detail pane in sync
+  // during rapid section changes; hashchange remains the source for back/forward.
+  tab.set(t);
+  routeRest.set(rest);
   location.hash = h;
 }

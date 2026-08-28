@@ -4,9 +4,8 @@ const CACHE = 'lerd-shell-' + VERSION;
 const SHELL = [
   '/offline.html',
   '/manifest.webmanifest',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png',
-  '/icons/icon.svg',
+  '/icons/icon-192.png?v=selected-l',
+  '/icons/icon-512.png?v=selected-l',
 ];
 
 self.addEventListener('install', (event) => {
@@ -44,7 +43,7 @@ self.addEventListener('push', (event) => {
   event.waitUntil(self.registration.showNotification(title, {
     body,
     tag: evt.tag || ('lerd-' + evt.kind),
-    icon: evt.icon || '/icons/icon-192.png',
+    icon: evt.icon || '/icons/icon-192.png?v=selected-l',
     data: {
       kind: evt.kind,
       url: evt.url || '',

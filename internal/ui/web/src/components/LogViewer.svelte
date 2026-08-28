@@ -96,11 +96,6 @@
         ? 'text-emerald-600 dark:text-emerald-500'
         : 'text-gray-400 dark:text-gray-600'}"
     >
-      <span
-        class="w-1.5 h-1.5 rounded-full {$connected
-          ? 'bg-emerald-500 animate-pulse'
-          : 'bg-gray-400 dark:bg-gray-600'}"
-      ></span>
       {$connected ? m.common_live() : m.common_disconnected()}
     </span>
     <div class="flex items-center gap-2">

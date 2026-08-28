@@ -273,19 +273,13 @@
       {#if report}
         <div class="hidden sm:flex items-center gap-1.5 shrink-0">
           {#if report.failures > 0}
-            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold {STATUS.fail.badge}">
-              <span class="w-1.5 h-1.5 rounded-full {STATUS.fail.dot}"></span>{report.failures}
-            </span>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-[4px] text-[11px] font-semibold {STATUS.fail.badge}">{report.failures}</span>
           {/if}
           {#if report.warnings > 0}
-            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold {STATUS.warn.badge}">
-              <span class="w-1.5 h-1.5 rounded-full {STATUS.warn.dot}"></span>{report.warnings}
-            </span>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-[4px] text-[11px] font-semibold {STATUS.warn.badge}">{report.warnings}</span>
           {/if}
           {#if okCount > 0}
-            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold {STATUS.ok.badge}">
-              <span class="w-1.5 h-1.5 rounded-full {STATUS.ok.dot}"></span>{okCount}
-            </span>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-[4px] text-[11px] font-semibold {STATUS.ok.badge}">{okCount}</span>
           {/if}
         </div>
       {/if}
@@ -308,7 +302,7 @@
               <div class="h-3 w-32 rounded bg-gray-200 dark:bg-white/5"></div>
               <div class="h-2.5 w-48 rounded bg-gray-100 dark:bg-white/[0.03]"></div>
             </div>
-            <span class="w-5 h-5 rounded-full bg-gray-200 dark:bg-white/5 shrink-0"></span>
+            <span class="w-5 h-5 rounded-[4px] bg-gray-200 dark:bg-white/5 shrink-0"></span>
           </div>
         {/each}
       </div>

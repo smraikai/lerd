@@ -101,11 +101,11 @@
     {/if}
   </div>
 
-  {#if $status.php_fpms.length > 0}
+  {#if ($status.php_fpms ?? []).length > 0}
     <div class="pt-2 border-t border-gray-100 dark:border-lerd-border">
       <div class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-2">{m.dashboard_health_php()}</div>
       <div class="flex flex-wrap gap-2">
-        {#each $status.php_fpms as fpm (fpm.version)}
+        {#each ($status.php_fpms ?? []) as fpm (fpm.version)}
           {@const count = $sitesByPhp.get(fpm.version) ?? 0}
           <span class="inline-flex items-center gap-1.5 text-xs font-mono px-2 py-0.5 rounded-sm bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-300">
             <StatusDot color={fpm.running ? 'green' : 'gray'} size="xs" />

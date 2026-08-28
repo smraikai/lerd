@@ -6,11 +6,11 @@
 
 @theme {
   --color-lerd-red: #ff2d20;
-  --color-lerd-redhov: #e02419;
-  --color-lerd-bg: #0d0d0d;
-  --color-lerd-card: #161616;
-  --color-lerd-border: #262626;
-  --color-lerd-muted: #404040;
+  --color-lerd-redhov: #e9281c;
+  --color-lerd-bg: #111112;
+  --color-lerd-card: #181819;
+  --color-lerd-border: #2b2b2d;
+  --color-lerd-muted: #3a3a3d;
 
   --font-sans: Inter, ui-sans-serif, system-ui, sans-serif;
 }
@@ -24,6 +24,30 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
+  html {
+    background: #f7f7f8;
+  }
+  html.dark {
+    background: var(--color-lerd-bg);
+  }
+  body {
+    margin: 0;
+    background: #f7f7f8;
+    color: #27272a;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    -webkit-font-smoothing: antialiased;
+  }
+  .dark body {
+    background: var(--color-lerd-bg);
+    color: #e4e4e7;
+  }
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+
   *,
   ::after,
   ::before,
@@ -58,6 +82,15 @@
 
 button {
   cursor: pointer;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--color-lerd-red) 72%, transparent);
+  outline-offset: 2px;
 }
 
 @utility no-scrollbar {

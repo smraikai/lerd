@@ -3,6 +3,8 @@
 </script>
 
 <script lang="ts">
+  import Icon, { type IconName } from './Icon.svelte';
+
   interface Props {
     color: StatusColor;
     size?: 'xs' | 'sm' | 'md';
@@ -11,25 +13,26 @@
   let { color, size = 'sm', pulse = false }: Props = $props();
 
   const colorClass: Record<StatusColor, string> = {
-    green: 'bg-emerald-500',
-    emerald: 'bg-emerald-500',
-    red: 'bg-red-500',
-    yellow: 'bg-yellow-400',
-    gray: 'bg-gray-300 dark:bg-gray-600',
-    blue: 'bg-blue-500',
-    amber: 'bg-amber-400',
-    violet: 'bg-violet-400',
-    sky: 'bg-sky-400',
-    indigo: 'bg-indigo-400'
+    green: 'text-emerald-600 dark:text-emerald-400',
+    emerald: 'text-emerald-600 dark:text-emerald-400',
+    red: 'text-red-500',
+    yellow: 'text-amber-500',
+    gray: 'text-gray-400 dark:text-gray-500',
+    blue: 'text-blue-500',
+    amber: 'text-amber-500',
+    violet: 'text-violet-500',
+    sky: 'text-sky-500',
+    indigo: 'text-indigo-500'
   };
 
   const sizeClass: Record<NonNullable<Props['size']>, string> = {
-    xs: 'w-1.5 h-1.5',
-    sm: 'w-2 h-2',
-    md: 'w-2.5 h-2.5'
+    xs: 'w-3 h-3',
+    sm: 'w-3.5 h-3.5',
+    md: 'w-4 h-4'
   };
 
-  const dotClass = $derived(`${sizeClass[size]} ${colorClass[color]} rounded-full shrink-0${pulse ? ' animate-pulse' : ''}`);
+  const iconName = $derived<IconName>(color === 'red' || color === 'yellow' || color === 'amber' ? 'warn' : color === 'gray' ? 'stop' : 'check');
+  const iconClass = $derived(`${sizeClass[size]} ${colorClass[color]} shrink-0${pulse ? ' opacity-80' : ''}`);
 </script>
 
-<span class={dotClass}></span>
+<Icon name={iconName} class={iconClass} />

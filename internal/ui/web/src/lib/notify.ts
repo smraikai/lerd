@@ -359,7 +359,7 @@ async function fireNotification(evt: NotificationEvent) {
   const opts: NotificationOptions = {
     body,
     tag: evt.tag,
-    icon: evt.icon ?? '/icons/icon-192.png',
+    icon: evt.icon ?? '/icons/icon-192.png?v=selected-l',
     data: { kind: evt.kind, url: evt.url ?? '', ...(evt.data ?? {}) }
   };
 

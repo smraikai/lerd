@@ -5,7 +5,7 @@
   import MobileHeader from '$components/MobileHeader.svelte';
   import MobileNav from '$components/MobileNav.svelte';
   import MobileBackBar from '$components/MobileBackBar.svelte';
-  import { tab, routeRest } from '$stores/route';
+  import { routeRest, parseHash, type TabId } from '$stores/route';
   import { loadVersion } from '$stores/version';
   import { loadAccessMode } from '$stores/accessMode';
   import { loadStatus } from '$stores/status';
@@ -47,6 +47,14 @@
     disconnectWs();
   }
 
+  // Keep the mounted desktop pane tied directly to browser history. The shared
+  // route store drives navigation labels and deep links; this local view key
+  // guarantees the content pane remounts on every top-level hash transition.
+  let viewTab = $state<TabId>(parseHash(location.hash).tab);
+  function handleRouteChange() {
+    viewTab = parseHash(location.hash).tab;
+  }
+
   onMount(() => {
     loadVersion();
     loadAccessMode();
@@ -68,10 +76,12 @@
     initDashboardRoute();
     initNotify();
     window.addEventListener('pagehide', handlePageHide);
+    window.addEventListener('hashchange', handleRouteChange);
   });
 
   onDestroy(() => {
     window.removeEventListener('pagehide', handlePageHide);
+    window.removeEventListener('hashchange', handleRouteChange);
     disconnectWs();
   });
 
@@ -80,19 +90,19 @@
   // if the user explicitly picked something, to avoid jumping past the list.
   const showMobileDetail = $derived(Boolean($routeRest));
   const onApps = $derived($mobileView === 'apps');
-  const onDashboard = $derived($tab === 'dashboard');
+  const onDashboard = $derived(viewTab === 'dashboard');
 </script>
 
-<div class="h-screen flex">
+<div class="h-screen flex bg-[#f7f7f8] dark:bg-lerd-bg text-gray-800 dark:text-gray-200">
   <NavRail />
 
   {#if !onDashboard}
     <SidePanel>
-      {#if $tab === 'sites'}
+      {#if viewTab === 'sites'}
         <SitesTab />
-      {:else if $tab === 'services'}
+      {:else if viewTab === 'services'}
         <ServicesTab />
-      {:else if $tab === 'system'}
+      {:else if viewTab === 'system'}
         <SystemTab />
       {/if}
     </SidePanel>
@@ -104,15 +114,10 @@
     {/if}
 
     <div class="hidden md:flex flex-col flex-1 overflow-hidden">
-      {#if $tab === 'dashboard'}
-        <DashboardTab />
-      {:else if $tab === 'sites'}
-        <SitesDetail />
-      {:else if $tab === 'services'}
-        <ServicesDetail />
-      {:else if $tab === 'system'}
-        <SystemDetail />
-      {/if}
+      {#if onDashboard}<DashboardTab />{/if}
+      {#if viewTab === 'sites'}<SitesDetail />{/if}
+      {#if viewTab === 'services'}<ServicesDetail />{/if}
+      {#if viewTab === 'system'}<SystemDetail />{/if}
     </div>
 
     {#if onApps}
@@ -125,22 +130,22 @@
       </div>
     {:else if !showMobileDetail}
       <div class="md:hidden flex-1 overflow-y-auto pb-16">
-        {#if $tab === 'sites'}
+        {#if viewTab === 'sites'}
           <SitesTab />
-        {:else if $tab === 'services'}
+        {:else if viewTab === 'services'}
           <ServicesTab />
-        {:else if $tab === 'system'}
+        {:else if viewTab === 'system'}
           <SystemTab />
         {/if}
       </div>
     {:else}
       <div class="md:hidden flex-1 flex flex-col overflow-hidden pb-16">
         <MobileBackBar />
-        {#if $tab === 'sites'}
+        {#if viewTab === 'sites'}
           <SitesDetail />
-        {:else if $tab === 'services'}
+        {:else if viewTab === 'services'}
           <ServicesDetail />
-        {:else if $tab === 'system'}
+        {:else if viewTab === 'system'}
           <SystemDetail />
         {/if}
       </div>

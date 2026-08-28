@@ -434,7 +434,7 @@ function maybeNotifyDone(cmd: Command, domain: string, exit: number, durationMs:
     const body = domain + ' · ' + durationMs + 'ms';
     if ('serviceWorker' in navigator) {
       void navigator.serviceWorker.ready
-        .then((reg) => reg.showNotification(title, { body, tag: 'lerd-cmd-' + domain + '-' + cmd.name, icon: '/icons/icon-192.png' }))
+        .then((reg) => reg.showNotification(title, { body, tag: 'lerd-cmd-' + domain + '-' + cmd.name, icon: '/icons/icon-192.png?v=selected-l' }))
         .catch(() => {
           new Notification(title, { body });
         });

@@ -1,7 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import CheckUpdatesButton from '$components/CheckUpdatesButton.svelte';
-  import { version, loadVersion } from '$stores/version';
+  import { version } from '$stores/version';
   import { accessMode } from '$stores/accessMode';
   import { lan, loadLANStatus, toggleLAN, generateRemoteSetupCode, copySetupCurl } from '$stores/lan';
   import { status } from '$stores/status';
@@ -19,7 +18,7 @@
   import SettingsCard from '$components/SettingsCard.svelte';
   import LANServicesSetting from './LANServicesSetting.svelte';
   import LanguageSwitcher from '$components/LanguageSwitcher.svelte';
-  import { apiFetch, apiBase } from '$lib/api';
+  import { apiBase } from '$lib/api';
   import { escapeHtml } from '$lib/html';
   import { m } from '../../paraglide/messages.js';
 
@@ -84,9 +83,6 @@
     }
   }
 
-  let updateTerminalLoading = $state(false);
-  let updateTerminalError = $state('');
-
   // There is no remote session to widen while lerd is loopback-only, so the
   // setting stays out of the way. An already enabled setting keeps showing, so
   // that re-exposing does not silently hand host access back out.
@@ -99,20 +95,6 @@
   const remoteCardHidden = $derived(
     !$lan.exposed && !$remoteControl.enabled && $status.dns?.enabled !== false
   );
-  async function openUpdateTerminal() {
-    updateTerminalLoading = true;
-    updateTerminalError = '';
-    try {
-      const res = await apiFetch('/api/lerd/update-terminal', { method: 'POST' });
-      const data = (await res.json()) as { ok?: boolean; error?: string };
-      if (!data.ok) updateTerminalError = data.error || m.common_failed();
-    } catch (e) {
-      updateTerminalError = e instanceof Error ? e.message : m.common_failed();
-    } finally {
-      updateTerminalLoading = false;
-    }
-  }
-
   async function doDisableRemoteControl() {
     await disableRemoteControl();
   }
@@ -126,77 +108,6 @@
 
   <div class="p-3 space-y-3">
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-    <SettingsCard>
-      <div class="flex items-center justify-between gap-3">
-        <div class="min-w-0 text-sm">
-          {#if $version.checked && !$version.hasUpdate}
-            <span class="inline-flex items-center gap-2 text-emerald-600 dark:text-emerald-500">
-              <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
-              </svg>
-              {m.system_lerd_latest()}
-            </span>
-          {:else if $version.hasUpdate}
-            <span class="inline-flex items-center gap-1.5 font-medium text-yellow-700 dark:text-yellow-400">
-              <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/>
-              </svg>
-              {m.system_lerd_available({ version: $version.latest })}
-            </span>
-          {/if}
-        </div>
-        <CheckUpdatesButton onclick={() => loadVersion(true)} checking={$version.checking} />
-      </div>
-
-      {#if $version.hasUpdate}
-        <div class="space-y-3 mt-3">
-          <p class="text-xs text-gray-500 dark:text-gray-400">
-            {@html m.system_lerd_updateHint({ cmd: '<code class="bg-gray-100 dark:bg-white/10 px-1.5 py-0.5 rounded-sm font-mono">lerd update</code>' })}
-          </p>
-          {#if $accessMode.localControl}
-            <button
-              onclick={openUpdateTerminal}
-              disabled={updateTerminalLoading}
-              class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium bg-gray-100 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 text-gray-700 dark:text-gray-300 disabled:opacity-50 transition-colors"
-            >
-              {#if updateTerminalLoading}
-                <svg class="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
-                </svg>
-                {m.system_lerd_openingTerminal()}
-              {:else}
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                </svg>
-                {m.system_lerd_openTerminal()}
-              {/if}
-            </button>
-          {/if}
-          {#if updateTerminalError}
-            <p class="text-xs text-red-500">{updateTerminalError}</p>
-          {/if}
-          {#if $version.changelog}
-            <div>
-              <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">{m.system_lerd_whatsNew()}</p>
-              <pre class="text-xs text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-white/3 rounded-lg p-3 overflow-x-auto whitespace-pre-wrap font-mono leading-relaxed border border-gray-100 dark:border-lerd-border">{$version.changelog}</pre>
-            </div>
-          {/if}
-        </div>
-      {/if}
-
-      <div class="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400 mt-3">
-        <svg class="w-3.5 h-3.5 shrink-0 mt-0.5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.367 2.446a1 1 0 00-.364 1.118l1.287 3.957c.3.922-.755 1.688-1.54 1.118l-3.366-2.446a1 1 0 00-1.176 0l-3.366 2.446c-.784.57-1.838-.196-1.54-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.098 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z"/>
-        </svg>
-        <p class="leading-relaxed">
-          {m.system_lerd_starBlurb()}
-          <a href="https://github.com/lerd-env/lerd" target="_blank" rel="noopener" class="font-medium text-lerd-red hover:text-lerd-redhov underline-offset-2 hover:underline">{m.system_lerd_starCta()}</a>
-          {m.system_lerd_starAfter()}
-        </p>
-      </div>
-    </SettingsCard>
-
     <SettingsCard>
       <div class="flex items-center justify-between mb-2">
         <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">{m.system_language_title()}</span>
